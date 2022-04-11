@@ -1,4 +1,6 @@
 import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarBuilder;
+import me.tongfei.progressbar.ProgressBarStyle;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -50,7 +52,7 @@ public class CyberdropDownloader {
         int urlCount = elements.size();
 
         ExecutorService pool = Executors.newFixedThreadPool(10);
-        List<Future<File>> results = new ArrayList<>();
+        List<Future<File>> results = new ArrayList<>(urlCount);
         for (final Element element : elements) {
 
             // These two lines remove illegal characters from url
@@ -66,12 +68,21 @@ public class CyberdropDownloader {
 
         }
 
-        ProgressBar pb = new ProgressBar("Downloading [" + title + "]", urlCount);
+        ProgressBarBuilder pbb = new ProgressBarBuilder()
+                .setStyle(ProgressBarStyle.ASCII);
 
+        //ProgressBar pb = new ProgressBar("Downloading [" + title + "]", urlCount);
+
+        for (Future<File> file : ProgressBar.wrap(results, pbb)){
+            file.get();
+        }
+        /*
         for (Future<File> fr : results) {
             File file = fr.get();
             pb.step();
         }
+
+         */
 
         pool.awaitTermination(800, TimeUnit.MILLISECONDS);
 

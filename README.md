@@ -28,11 +28,6 @@ File will be stored in the same directory and specified at the end of `native-im
 You can just use prebuilt binaries, which are stored in [prebuilt]() folder.
 
 
-# Run application
-
-
-
-
 # Usage
 
 You can specify **two** arguments:

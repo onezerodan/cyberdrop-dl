@@ -26,7 +26,7 @@ native-image -jar /path/to/cyberdrop-dl-[version]-jar-with-dependencies.jar <nam
 File will be stored in the same directory and specified at the end of `native-image` output.
 
 ### Prebuilt binaries
-You can just use prebuilt binaries, which are stored in [prebuilt]() folder.
+You can just use prebuilt binaries, which are stored in [prebuilt]() folder (macOS).
 
 
 # Usage

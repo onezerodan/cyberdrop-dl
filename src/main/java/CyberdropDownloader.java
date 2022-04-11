@@ -7,6 +7,8 @@ import us.monoid.web.Resty;
 
 import java.io.File;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -31,31 +33,35 @@ public class CyberdropDownloader {
         Document doc = Jsoup.connect(url).userAgent("Chrome/4.0.249.0 Safari/532.5").referrer("http://www.google.com").get();
 
         title = doc.getElementsByAttributeValue("class", "title has-text-centered").text();
-        Elements imgUrls = doc.getElementsByClass("image");
+        Elements elemts = doc.getElementsByClass("image");
 
         File saveDir = new File(path + "/" + title);
         if (!saveDir.exists()) {
             saveDir.mkdir();
-            System.out.println("Directory [" + String.valueOf(saveDir.getAbsolutePath()) + "] created.");
+            System.out.println("Directory [" + saveDir.getAbsolutePath() + "] created.");
         }
 
-        downloadImagesAsync(imgUrls, String.valueOf(saveDir));
+        downloadAlbumAsync(elemts, String.valueOf(saveDir));
     }
 
 
-    private static void downloadImagesAsync(Elements imgElements, String path) throws Exception {
+    private static void downloadAlbumAsync(Elements elements, String path) throws Exception {
 
-        int urlCount = imgElements.size();
+        int urlCount = elements.size();
 
         ExecutorService pool = Executors.newFixedThreadPool(10);
         List<Future<File>> results = new ArrayList<>();
-        for (final Element element : imgElements) {
+        for (final Element element : elements) {
 
-            String imgUrl = element.attr("href").replace(" ", "%20");
+            // These two lines remove illegal characters from url
+            URL url = new URL(element.attr("href"));
+            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+
+            String elementUrl =  uri.toString();
             String imgTitle = element.attr("title");
 
             results.add(pool.submit(() -> new Resty()
-                    .bytes(imgUrl)
+                    .bytes(elementUrl)
                     .save(new File(path + "/" + imgTitle))));
 
         }

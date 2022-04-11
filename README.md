@@ -1,6 +1,7 @@
 # cyberdrop-dl
 
 Java command-line application to download albums from [cyberdrop.me](https://cyberdrop.me)  
+##### cyberdrop-dl  uses multi-threaded download, so photos will be downloaded incredibly fast!
 
 # Requirements
 - JDK 17 (or higher)  

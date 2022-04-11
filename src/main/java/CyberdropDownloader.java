@@ -71,18 +71,10 @@ public class CyberdropDownloader {
         ProgressBarBuilder pbb = new ProgressBarBuilder()
                 .setStyle(ProgressBarStyle.ASCII);
 
-        //ProgressBar pb = new ProgressBar("Downloading [" + title + "]", urlCount);
-
         for (Future<File> file : ProgressBar.wrap(results, pbb)){
             file.get();
         }
-        /*
-        for (Future<File> fr : results) {
-            File file = fr.get();
-            pb.step();
-        }
 
-         */
 
         pool.awaitTermination(800, TimeUnit.MILLISECONDS);
 
